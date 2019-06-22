@@ -106,7 +106,7 @@ def send_loadavg(default_dash_dt, args, cid):
     # cd3:loadavg15
     data = event('loadavg', default_dash_dt, None, 0, cd1=loadavg1, cd2=loadavg5, cd3=loadavg15)
     report(args.property, cid, data)
-
+    
 def main():
     parser = argparse.ArgumentParser(description="Main Script's argments")
     parser.add_argument("-p", "--property", type=str, required=True, help='Specify properties of Google Analytics.')
