@@ -20,14 +20,18 @@ def send_network(dt_str, default_dash_dt, args, cid):
         if statistics:
             net_devs = statistics[-1].get("network").get("net-dev")
             for net_dev in net_devs:
-                data = event('network-' + net_dev.get('iface'), 'rxkB', net_dev.get('rxkB'), 0, cd1=default_dash_dt)
-                report(args.property, cid, data)
-                data = event('network-' + net_dev.get('iface'), 'txkB', net_dev.get('txkB'), 0, cd1=default_dash_dt)
+                # -----------------
+                # cd1:net_dev.get('rxkB')
+                # cd2=net_dev.get('txkB')
+                data = event('network-' + net_dev.get('iface'), default_dash_dt, None, 0, cd1=net_dev.get('rxkB'),cd2=net_dev.get('txkB'))
                 report(args.property, cid, data)
 
 def send_filesystem(default_dash_dt, args, cid):
     disk_partitions = psutil.disk_partitions()
     for partition in disk_partitions:
+        # -------------------------
+        # cd1:total
+        # cd2:used
         usage = psutil.disk_usage(partition.mountpoint)
         total = usage.total / 1024 / 1024
         used = usage.used / 1024 / 1024
@@ -40,6 +44,9 @@ def send_io(dt_str, default_dash_dt, args, cid):
         json_o = json.loads(result)
         statistics = json_o.get('sysstat').get('hosts')[-1].get('statistics')
         if statistics:
+            # -------------------------
+            # cd1:rtps
+            # cd2:wtps
             io = statistics[-1].get("io")
             rtps = io.get("io-reads").get("rtps")
             wtps = io.get("io-writes").get("wtps")
@@ -79,6 +86,10 @@ def send_cpu(dt_str, default_dash_dt, args, cid):
         if statistics:
             cpu_loads = statistics[-1].get("cpu-load")
             for cpu_load in cpu_loads:
+                # -----------------------
+                # cd1:user
+                # cd2:system
+                # cd3:iowait
                 user = cpu_load.get("user") * 100 
                 system = cpu_load.get("system") * 100 
                 iowait = cpu_load.get("iowait") * 100
