@@ -35,7 +35,7 @@ def send_filesystem(default_dash_dt, args, cid):
         usage = psutil.disk_usage(partition.mountpoint)
         total = usage.total / 1024 / 1024
         used = usage.used / 1024 / 1024
-        data = event('filesystem-' + partition.device, default_dash_dt, None, usage.used / 1024 / 1024, 0,  cd1=total,cd2=used)
+        data = event('filesystem-' + partition.device, default_dash_dt, None, 0,  cd1=total,cd2=used)
         report(args.property, cid, data)
 
 def send_io(dt_str, default_dash_dt, args, cid):
